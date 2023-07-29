@@ -20,7 +20,10 @@ def retrieve_latest_message(channelid):
     headers = {
         'authorization': 'yourtoken'
     }
-    r = requests.get(f'https://discord.com/api/v8/channels/{channelid}/messages', headers=headers)
+    params = {
+        'limit': 1
+    }
+    r = requests.get(f'https://discord.com/api/v8/channels/{channelid}/messages', headers=headers, params=params)
     messages = json.loads(r.text)
     
     if not isinstance(messages, list) or len(messages) == 0:
