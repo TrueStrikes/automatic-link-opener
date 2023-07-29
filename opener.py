@@ -15,7 +15,7 @@ def open_in_browser(url):
 
 def retrieve_latest_message(channelid):
     headers = {
-        'authorization': 'YOURUSERTOKENNOTBOTTOKEN'
+        'authorization': 'token'
     }
     params = {
         'limit': 1
@@ -39,6 +39,9 @@ def retrieve_latest_message(channelid):
 
 # Change the channel ID here as needed
 channel_id = '1094291863332192376'
+
+# Print "The bot is working, there's just nothing to open" on startup
+print("The bot is working, there's just nothing to open")
 
 # Set the loop to run indefinitely
 while True:
