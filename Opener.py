@@ -1,24 +1,21 @@
 import requests
 import json
-import subprocess
+import webbrowser
 import time
 from colorama import init, Fore
 
 # Initialize colorama to support colored text in the console
 init()
 
-# Change the browser path here as needed
-BROWSER_PATH = r'yourbrowserpath'
-
 # Set to keep track of opened links
 opened_links = set()
 
 def open_in_browser(url):
-    subprocess.run([BROWSER_PATH, url], shell=True)
+    webbrowser.open(url, new=0, autoraise=True)
 
 def retrieve_latest_message(channelid):
     headers = {
-        'authorization': 'yourtoken'
+        'authorization': 'YOURUSERTOKENNOTBOTTOKEN'
     }
     params = {
         'limit': 1
