@@ -56,7 +56,6 @@ def retrieve_latest_message(channelid):
                             open_in_browser(roblox_url)
 
 def open_in_browser(url):
-    import webbrowser
     webbrowser.open(url, new=0, autoraise=True)
 
 # Change the channel ID here as needed
@@ -64,7 +63,7 @@ channel_id = '1115748732097544232'
 
 # Clear the console and print "The bot is working, there's just nothing to open" in yellow
 os.system('cls' if os.name == 'nt' else 'clear')
-print(f"{Fore.YELLOW}Using Mewt's autosearch{Fore.RESET}")
+print(f"{Fore.YELLOW}The bot is working, there's just nothing to open{Fore.RESET}")
 
 # Set the loop to run indefinitely with a 0.2 seconds wait
 while True:
