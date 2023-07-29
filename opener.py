@@ -1,7 +1,6 @@
 import requests
 import json
 import webbrowser
-import os
 import time
 from colorama import init, Fore
 
@@ -12,7 +11,7 @@ init()
 opened_links = set()
 
 # Replace 'YOUR_WEBHOOK_URL_HERE' with your actual webhook URL
-YOUR_WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE'
+YOUR_WEBHOOK_URL = 'yourwebhook'
 
 def send_discord_webhook(webhook_url, message):
     data = {
@@ -27,7 +26,7 @@ def send_discord_webhook(webhook_url, message):
 
 def retrieve_latest_message(channelid):
     headers = {
-        'authorization': 'token'
+        'authorization': 'yourtoken'
     }
     params = {
         'limit': 1
@@ -43,30 +42,27 @@ def retrieve_latest_message(channelid):
     embeds = latest_message.get('embeds')
     if embeds:
         for embed in embeds:
-            roblox_url = embed.get('url')
-            if roblox_url and 'roblox.com/catalog/' in roblox_url and roblox_url not in opened_links:
-                opened_links.add(roblox_url)  # Add the link to the set
-                message_to_send = "Opened a link: " + roblox_url
-                send_discord_webhook(YOUR_WEBHOOK_URL, message_to_send)
-                print(f"{Fore.RED}{message_to_send}{Fore.RESET}")
-                open_in_browser(roblox_url)
+            if 'roblox.com/catalog/' in embed.get('url', '') and embed.get('type') == 'rich':
+                roblox_url = embed.get('url')
+                if roblox_url and roblox_url not in opened_links:
+                    opened_links.add(roblox_url)  # Add the link to the set
+                    message_to_send = "Opened a link: " + roblox_url
+                    send_discord_webhook(YOUR_WEBHOOK_URL, message_to_send)
+                    print(f"{Fore.RED}{message_to_send}{Fore.RESET}")
+                    open_in_browser(roblox_url)
 
 def open_in_browser(url):
-    # Check if the script is running on Termux
-    if 'termux' in os.uname().sysname.lower():
-        os.system(f'termux-open-url {url}')
-    else:
-        import webbrowser
-        webbrowser.open(url, new=0, autoraise=True)
+    webbrowser.open(url, new=0, autoraise=True)
 
 # Change the channel ID here as needed
-channel_id = '1094291863332192376'
+channel_id = '1115748732097544232'
 
 # Clear the console and print "The bot is working, there's just nothing to open" in yellow
+import os
 os.system('cls' if os.name == 'nt' else 'clear')
 print(f"{Fore.YELLOW}The bot is working, there's just nothing to open{Fore.RESET}")
 
-# Set the loop to run indefinitely
+# Set the loop to run indefinitely with a 0.2 seconds wait
 while True:
     retrieve_latest_message(channel_id)
-    time.sleep(0.2)  # Add a wait time of 0.2 seconds before the next iteration
+    time.sleep(0.2)
