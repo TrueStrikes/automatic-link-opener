@@ -64,7 +64,7 @@ channel_id = '1115748732097544232'
 
 # Clear the console and print "The bot is working, there's just nothing to open" in yellow
 os.system('cls' if os.name == 'nt' else 'clear')
-print(f"{Fore.YELLOW}The bot is working, there's just nothing to open{Fore.RESET}")
+print(f"{Fore.YELLOW}Using Mewt's autosearch{Fore.RESET}")
 
 # Set the loop to run indefinitely with a 0.2 seconds wait
 while True:
