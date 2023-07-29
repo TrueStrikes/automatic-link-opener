@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import webbrowser
@@ -28,20 +29,26 @@ def retrieve_latest_message(channelid):
 
     latest_message = messages[0]  # The latest message is the first in the list
 
-    embeds = latest_message.get('embeds')
-    if embeds:
-        for embed in embeds:
-            roblox_url = embed.get('url')
-            if roblox_url and 'roblox.com/catalog/' in roblox_url and roblox_url not in opened_links:
-                opened_links.add(roblox_url)  # Add the link to the set
-                print(f"{Fore.RED}Opened a link: {roblox_url}{Fore.RESET}")
-                open_in_browser(roblox_url)
+    content = latest_message.get('content')
+    if "free item yo" in content.lower():
+        embeds = latest_message.get('embeds')
+        if embeds:
+            for embed in embeds:
+                roblox_url = embed.get('url')
+                if roblox_url and 'roblox.com/catalog/' in roblox_url and roblox_url not in opened_links:
+                    opened_links.add(roblox_url)  # Add the link to the set
+                    if not hasattr(retrieve_latest_message, 'printed_message'):
+                        print(f"{Fore.YELLOW}Autosearcher started{Fore.RESET}")
+                        retrieve_latest_message.printed_message = True
+                    print(f"{Fore.RED}Opened a link: {roblox_url}{Fore.RESET}")
+                    open_in_browser(roblox_url)
 
 # Change the channel ID here as needed
-channel_id = '1134616603221303478'
+channel_id = '1124220970786369576'
 
-# Print "The bot is working, there's just nothing to open" on startup
-print("The bot is working, there's just nothing to open")
+# Clear the console and print "Autosearcher started" in yellow
+os.system('cls' if os.name == 'nt' else 'clear')
+print(f"{Fore.YELLOW}Autosearcher started{Fore.RESET}")
 
 # Set the loop to run indefinitely
 while True:
