@@ -37,7 +37,7 @@ def retrieve_latest_message(channelid):
                 print(f"{Fore.RED}Opened a link: {roblox_url}{Fore.RESET}")
                 open_in_browser(roblox_url)
 
-# Change the channel ID here as needed
+# This is the rolimons free ugc id. Change the channel ID here as needed.
 channel_id = '1094291863332192376'
 
 # Print "The bot is working, there's just nothing to open" on startup
