@@ -1,6 +1,7 @@
 import requests
 import json
 import webbrowser
+import os
 import time
 from colorama import init, Fore
 
@@ -10,8 +11,19 @@ init()
 # Set to keep track of opened links
 opened_links = set()
 
-def open_in_browser(url):
-    webbrowser.open(url, new=0, autoraise=True)
+# Replace 'YOUR_WEBHOOK_URL_HERE' with your actual webhook URL
+YOUR_WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE'
+
+def send_discord_webhook(webhook_url, message):
+    data = {
+        "content": message
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    response = requests.post(webhook_url, json=data, headers=headers)
+    if response.status_code != 204:
+        print(f"Failed to send webhook. Status code: {response.status_code}")
 
 def retrieve_latest_message(channelid):
     headers = {
@@ -34,14 +46,25 @@ def retrieve_latest_message(channelid):
             roblox_url = embed.get('url')
             if roblox_url and 'roblox.com/catalog/' in roblox_url and roblox_url not in opened_links:
                 opened_links.add(roblox_url)  # Add the link to the set
-                print(f"{Fore.RED}Opened a link: {roblox_url}{Fore.RESET}")
+                message_to_send = "Opened a link: " + roblox_url
+                send_discord_webhook(YOUR_WEBHOOK_URL, message_to_send)
+                print(f"{Fore.RED}{message_to_send}{Fore.RESET}")
                 open_in_browser(roblox_url)
 
-# This is the rolimons free ugc id. Change the channel ID here as needed.
+def open_in_browser(url):
+    # Check if the script is running on Termux
+    if 'termux' in os.uname().sysname.lower():
+        os.system(f'termux-open-url {url}')
+    else:
+        import webbrowser
+        webbrowser.open(url, new=0, autoraise=True)
+
+# Change the channel ID here as needed
 channel_id = '1094291863332192376'
 
-# Print "The bot is working, there's just nothing to open" on startup
-print("The bot is working, there's just nothing to open")
+# Clear the console and print "The bot is working, there's just nothing to open" in yellow
+os.system('cls' if os.name == 'nt' else 'clear')
+print(f"{Fore.YELLOW}The bot is working, there's just nothing to open{Fore.RESET}")
 
 # Set the loop to run indefinitely
 while True:
