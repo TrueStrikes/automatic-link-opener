@@ -2,9 +2,13 @@ import requests
 import json
 import subprocess
 import time
+from colorama import init, Fore
+
+# Initialize colorama to support colored text in the console
+init()
 
 # Change the browser path here as needed
-BROWSER_PATH = r'YOURBROWSERPATH'
+BROWSER_PATH = r'yourbrowserpath'
 
 # Set to keep track of opened links
 opened_links = set()
@@ -20,26 +24,21 @@ def retrieve_latest_message(channelid):
     messages = json.loads(r.text)
     
     if not isinstance(messages, list) or len(messages) == 0:
-        print("No messages found in the channel.")
         return
 
     latest_message = messages[0]  # The latest message is the first in the list
-    content = latest_message.get('content')
-    if content:
-        print(f"Message Content: {content}")
 
     embeds = latest_message.get('embeds')
     if embeds:
-        print("Embeds:")
         for embed in embeds:
-            print(embed, '\n')
             roblox_url = embed.get('url')
             if roblox_url and 'roblox.com/catalog/' in roblox_url and roblox_url not in opened_links:
                 opened_links.add(roblox_url)  # Add the link to the set
+                print(f"{Fore.RED}Opened a link: {roblox_url}{Fore.RESET}")
                 open_in_browser(roblox_url)
 
 # Change the channel ID here as needed
-channel_id = 'yourchannelid'
+channel_id = '1094291863332192376'
 
 # Set the loop to run indefinitely
 while True:
