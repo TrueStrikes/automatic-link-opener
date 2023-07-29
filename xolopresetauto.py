@@ -43,23 +43,35 @@ def retrieve_latest_message(channelid):
     embeds = latest_message.get('embeds')
     if embeds:
         for embed in embeds:
-            fields = embed.get('fields')
-            if fields:
-                for field in fields:
-                    if field.get('name') == 'Price' and field.get('value') == '`0`':
-                        roblox_url = embed.get('url')
-                        if roblox_url and 'roblox.com/catalog/' in roblox_url and roblox_url not in opened_links:
-                            opened_links.add(roblox_url)  # Add the link to the set
-                            message_to_send = "Opened a link: " + roblox_url
-                            send_discord_webhook(YOUR_WEBHOOK_URL, message_to_send)
-                            print(f"{Fore.RED}{message_to_send}{Fore.RESET}")
-                            open_in_browser(roblox_url)
+            if 'roblox.com/catalog/' in embed.get('url', '') and embed.get('type') == 'rich':
+                roblox_url = embed.get('url')
+                if roblox_url and roblox_url not in opened_links:
+                    opened_links.add(roblox_url)  # Add the link to the set
+                    message_to_send = "Opened a link: " + roblox_url
+                    send_discord_webhook(YOUR_WEBHOOK_URL, message_to_send)
+                    print(f"{Fore.RED}{message_to_send}{Fore.RESET}")
+                    open_in_browser(roblox_url)
+
+    content = latest_message.get('content', '').lower()
+    if 'free item yo' in content:
+        roblox_links = find_roblox_links(content)
+        for link in roblox_links:
+            if link not in opened_links:
+                opened_links.add(link)  # Add the link to the set
+                message_to_send = "Opened a link: " + link
+                send_discord_webhook(YOUR_WEBHOOK_URL, message_to_send)
+                print(f"{Fore.RED}{message_to_send}{Fore.RESET}")
+                open_in_browser(link)
 
 def open_in_browser(url):
     webbrowser.open(url, new=0, autoraise=True)
 
+def find_roblox_links(text):
+    import re
+    return re.findall(r'https?://(?:www\.)?roblox\.com/catalog/\d+', text)
+
 # Change the channel ID here as needed
-channel_id = '1115748732097544232'
+channel_id = '1124220970786369576'
 
 # Clear the console and print "The bot is working, there's just nothing to open" in yellow
 os.system('cls' if os.name == 'nt' else 'clear')
