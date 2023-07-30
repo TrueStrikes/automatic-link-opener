@@ -1,0 +1,5 @@
+{
+  "channel_id": "YOUR_CHANNEL_ID",
+  "webhook_url": "YOUR_WEBHOOK_URL",
+  "token": "YOUR_DISCORD_BOT_TOKEN"
+}
