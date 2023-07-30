@@ -39,6 +39,17 @@ def retrieve_latest_message(channelid):
 
     latest_message = messages[0]  # The latest message is the first in the list
 
+    content = latest_message.get('content', '').lower()
+    if 'roblox.com/catalog/' in content:
+        roblox_links = find_roblox_links(content)
+        for link in roblox_links:
+            if link not in opened_links:
+                opened_links.add(link)  # Add the link to the set
+                message_to_send = "Opened a link: " + link
+                send_discord_webhook(YOUR_WEBHOOK_URL, message_to_send)
+                print(f"{Fore.RED}{message_to_send}{Fore.RESET}")
+                open_in_browser(link)
+
     embeds = latest_message.get('embeds')
     if embeds:
         for embed in embeds:
@@ -54,8 +65,12 @@ def retrieve_latest_message(channelid):
 def open_in_browser(url):
     webbrowser.open(url, new=0, autoraise=True)
 
+def find_roblox_links(text):
+    import re
+    return re.findall(r'https?://(?:www\.)?roblox\.com/catalog/\d+', text)
+
 # Change the channel ID here as needed
-channel_id = '1115748732097544232'
+channel_id = '1094291863332192376'
 
 # Clear the console and print "The bot is working, there's just nothing to open" in yellow
 import os
