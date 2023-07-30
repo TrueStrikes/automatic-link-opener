@@ -1,3 +1,6 @@
+# People who cant read: this is autosearch
+
+
 Setup:
 1. Fill in your channel id you want to watch.
 2. Fill in your token.
